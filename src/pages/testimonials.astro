@@ -1,0 +1,66 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import TestimonialCard from '../components/TestimonialCard.astro';
+
+const testimonials = await getCollection('testimonials');
+const testimonialsWithContent = await Promise.all(
+	testimonials.map(async (testimonial) => {
+		const { Content } = await render(testimonial);
+		return { testimonial, Content };
+	})
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title="Testimonials" description="What clients say about my work" />
+		<style>
+			main {
+				width: 960px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 3em 1em;
+			}
+			.page-header {
+				text-align: center;
+				margin-bottom: 3rem;
+			}
+			.testimonials-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+				gap: 2rem;
+			}
+			@media (max-width: 720px) {
+				.testimonials-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="page-header">
+				<h1>Client Testimonials</h1>
+				<p>Feedback from clients I've had the pleasure of working with</p>
+			</div>
+			<div class="testimonials-grid">
+				{testimonialsWithContent.map(async ({ testimonial, Content }) => {
+					// Render content to get the text
+					const content = await Content();
+					return (
+						<TestimonialCard 
+							testimonial={testimonial} 
+							content={content}
+						/>
+					);
+				})}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

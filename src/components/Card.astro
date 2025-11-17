@@ -1,0 +1,66 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	href?: string;
+	variant?: 'default' | 'highlight';
+}
+
+const { title, description, href, variant = 'default' } = Astro.props;
+---
+
+<div class:list={['card', variant]}>
+	<h3>{title}</h3>
+	<p>{description}</p>
+	{href && (
+		<a href={href} class="card-link">
+			Learn More →
+		</a>
+	)}
+</div>
+
+<style>
+	.card {
+		padding: 1.5rem;
+		border-radius: 12px;
+		background: white;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		transition: transform 0.2s ease, box-shadow 0.2s ease;
+	}
+	
+	.card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+	}
+	
+	.card.highlight {
+		background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+		color: white;
+	}
+	
+	.card h3 {
+		margin: 0 0 0.5rem 0;
+		font-size: 1.5rem;
+	}
+	
+	.card p {
+		margin: 0 0 1rem 0;
+		line-height: 1.6;
+	}
+	
+	.card-link {
+		display: inline-block;
+		color: var(--accent);
+		text-decoration: none;
+		font-weight: 600;
+	}
+	
+	.card.highlight .card-link {
+		color: white;
+		opacity: 0.9;
+	}
+	
+	.card-link:hover {
+		text-decoration: underline;
+	}
+</style>

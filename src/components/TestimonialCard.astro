@@ -1,0 +1,94 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	testimonial: CollectionEntry<'testimonials'>;
+	content: string;
+}
+
+const { testimonial, content } = Astro.props;
+const { name, role, company, avatar, rating } = testimonial.data;
+---
+
+<div class="testimonial-card">
+	<div class="rating">
+		{Array.from({ length: rating }).map(() => (
+			<span class="star">★</span>
+		))}
+	</div>
+	<blockquote>{content}</blockquote>
+	<div class="author">
+		{avatar && (
+			<div class="avatar">
+				<Image src={avatar} alt={name} width={60} height={60} />
+			</div>
+		)}
+		<div class="author-info">
+			<strong>{name}</strong>
+			<p>{role} at {company}</p>
+		</div>
+	</div>
+</div>
+
+<style>
+	.testimonial-card {
+		background: white;
+		padding: 2rem;
+		border-radius: 12px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		height: 100%;
+	}
+	
+	.rating {
+		margin-bottom: 1rem;
+		color: #fbbf24;
+		font-size: 1.5rem;
+	}
+	
+	.star {
+		display: inline-block;
+		margin-right: 0.25rem;
+	}
+	
+	blockquote {
+		font-style: italic;
+		color: rgb(var(--gray-dark));
+		margin: 0 0 1.5rem 0;
+		border-left: none;
+		padding: 0;
+		font-size: 1rem;
+	}
+	
+	.author {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+	
+	.avatar {
+		width: 60px;
+		height: 60px;
+		border-radius: 50%;
+		overflow: hidden;
+	}
+	
+	.avatar img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 50%;
+	}
+	
+	.author-info strong {
+		display: block;
+		color: rgb(var(--black));
+		font-size: 1.1rem;
+	}
+	
+	.author-info p {
+		margin: 0.25rem 0 0 0;
+		color: rgb(var(--gray));
+		font-size: 0.9rem;
+	}
+</style>

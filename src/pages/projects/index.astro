@@ -1,0 +1,59 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects')).sort(
+	(a, b) => b.data.projectDate.valueOf() - a.data.projectDate.valueOf(),
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title="Projects" description="View my portfolio of web development projects" />
+		<style>
+			main {
+				width: 960px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 3em 1em;
+			}
+			.page-header {
+				text-align: center;
+				margin-bottom: 3rem;
+			}
+			.page-header h1 {
+				margin-bottom: 1rem;
+			}
+			.projects-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+				gap: 2rem;
+				margin-top: 2rem;
+			}
+			@media (max-width: 720px) {
+				.projects-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="page-header">
+				<h1>My Projects</h1>
+				<p>A collection of web development projects showcasing various technologies and approaches</p>
+			</div>
+			<div class="projects-grid">
+				{projects.map((project) => (
+					<ProjectCard project={project} />
+				))}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

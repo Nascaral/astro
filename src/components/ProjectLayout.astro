@@ -1,0 +1,148 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+
+type Props = CollectionEntry<'projects'>['data'];
+
+const { title, description, projectDate, technologies, projectImage, githubUrl, liveUrl } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<style>
+			main {
+				width: calc(100% - 2em);
+				max-width: 100%;
+				margin: 0;
+			}
+			.project-header {
+				padding: 3rem 0;
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				color: white;
+				text-align: center;
+			}
+			.project-header h1 {
+				color: white;
+				margin-bottom: 1rem;
+			}
+			.project-image {
+				width: 100%;
+				max-width: 1200px;
+				margin: 2rem auto;
+			}
+			.project-image img {
+				display: block;
+				width: 100%;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+			}
+			.project-content {
+				width: 720px;
+				max-width: calc(100% - 2em);
+				margin: 0 auto;
+				padding: 2rem 1em;
+			}
+			.project-meta {
+				display: flex;
+				gap: 2rem;
+				flex-wrap: wrap;
+				margin: 2rem 0;
+				padding: 1.5rem;
+				background: rgb(var(--gray-light));
+				border-radius: 12px;
+			}
+			.meta-item h3 {
+				margin: 0 0 0.5rem 0;
+				font-size: 1rem;
+				color: rgb(var(--gray));
+			}
+			.technologies {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+			}
+			.tech-tag {
+				padding: 0.25rem 0.75rem;
+				background: white;
+				border-radius: 20px;
+				font-size: 0.875rem;
+			}
+			.project-links {
+				display: flex;
+				gap: 1rem;
+				margin: 2rem 0;
+			}
+			.btn {
+				padding: 0.75rem 1.5rem;
+				background: var(--accent);
+				color: white;
+				text-decoration: none;
+				border-radius: 8px;
+				font-weight: 600;
+				transition: background 0.2s ease;
+			}
+			.btn:hover {
+				background: var(--accent-dark);
+			}
+			.btn-secondary {
+				background: rgb(var(--gray));
+			}
+			.btn-secondary:hover {
+				background: rgb(var(--gray-dark));
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<div class="project-header">
+				<h1>{title}</h1>
+				<p>{description}</p>
+			</div>
+			
+			{projectImage && (
+				<div class="project-image">
+					<Image width={1200} height={600} src={projectImage} alt={title} />
+				</div>
+			)}
+			
+			<div class="project-content">
+				<div class="project-meta">
+					<div class="meta-item">
+						<h3>Date</h3>
+						<p>{projectDate.toLocaleDateString('en-us', { year: 'numeric', month: 'long' })}</p>
+					</div>
+					<div class="meta-item">
+						<h3>Technologies</h3>
+						<div class="technologies">
+							{technologies.map((tech) => (
+								<span class="tech-tag">{tech}</span>
+							))}
+						</div>
+					</div>
+				</div>
+				
+				<div class="project-links">
+					{githubUrl && (
+						<a href={githubUrl} target="_blank" rel="noopener noreferrer" class="btn">
+							View on GitHub
+						</a>
+					)}
+					{liveUrl && (
+						<a href={liveUrl} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+							Live Demo
+						</a>
+					)}
+				</div>
+				
+				<slot />
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
