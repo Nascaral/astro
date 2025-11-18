@@ -3,7 +3,6 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-	site: 'https://github.com',
-	base: '',
-	integrations: [mdx(), sitemap()],
+  site: 'https://d0ba6b4e.astro-d1k.pages.dev', // FIXED
+  integrations: [mdx(), sitemap()],
 });

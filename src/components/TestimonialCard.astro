@@ -3,11 +3,11 @@ import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-	testimonial: CollectionEntry<'testimonials'>;
-	Content: any;
+  testimonial: CollectionEntry<'testimonials'>;
+  content: string; // now lowercase
 }
 
-const { testimonial, Content } = Astro.props;
+const { testimonial, content } = Astro.props;
 const { name, role, company, avatar, rating } = testimonial.data;
 ---
 
@@ -17,7 +17,9 @@ const { name, role, company, avatar, rating } = testimonial.data;
 			<span class="star">★</span>
 		))}
 	</div>
-	<blockquote><Content /></blockquote>
+
+	<blockquote innerHTML={content}></blockquote>
+
 	<div class="author">
 		{avatar && (
 			<div class="avatar">
