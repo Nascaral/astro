@@ -5,11 +5,14 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
+import TagList from '../../components/TagList.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const allTags = [...new Set(posts.flatMap((post) => post.data.tags || []))];
 ---
 
 <!doctype html>
@@ -19,6 +22,13 @@ const posts = (await getCollection('blog')).sort(
 		<style>
 			main {
 				width: 960px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 3em 1em;
+			}
+			.page-header {
+				text-align: center;
+				margin-bottom: 2rem;
 			}
 			ul {
 				display: flex;
@@ -62,6 +72,19 @@ const posts = (await getCollection('blog')).sort(
 				margin: 0;
 				color: rgb(var(--gray));
 			}
+			.tags {
+				display: flex;
+				gap: 0.5rem;
+				flex-wrap: wrap;
+				margin-top: 0.5rem;
+			}
+			.tag-badge {
+				padding: 0.25rem 0.75rem;
+				background: rgb(var(--gray-light));
+				border-radius: 20px;
+				font-size: 0.8rem;
+				color: rgb(var(--gray-dark));
+			}
 			ul li a:hover h4,
 			ul li a:hover .date {
 				color: rgb(var(--accent));
@@ -89,23 +112,35 @@ const posts = (await getCollection('blog')).sort(
 	<body>
 		<Header />
 		<main>
+			<div class="page-header">
+				<h1>Blog</h1>
+				<p>Articles, tutorials, and thoughts on web development</p>
+			</div>
+			
+			{allTags.length > 0 && <TagList tags={allTags} />}
+			
 			<section>
 				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
+					{posts.map((post) => (
+						<li>
+							<a href={`/blog/${post.id}/`}>
+								{post.data.heroImage && (
+									<Image width={720} height={360} src={post.data.heroImage} alt="" />
+								)}
+								<h4 class="title">{post.data.title}</h4>
+								<p class="date">
+									<FormattedDate date={post.data.pubDate} />
+								</p>
+								{post.data.tags && (
+									<div class="tags">
+										{post.data.tags.map((tag) => (
+											<span class="tag-badge">{tag}</span>
+										))}
+									</div>
+								)}
+							</a>
+						</li>
+					))}
 				</ul>
 			</section>
 		</main>
