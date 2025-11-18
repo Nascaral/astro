@@ -4,6 +4,6 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
 	site: 'https://github.com',
-	base: '/Nascaral/astro',
+	base: '',
 	integrations: [mdx(), sitemap()],
 });
